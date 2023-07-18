@@ -453,7 +453,7 @@ function initTextBoxes() {
                 let trantext = document.getElementById("trantext")
                 let trantextComplete = '';
                 let trantextlist = this.childNodes.forEach(textt => {
-                    trantextComplete = trantextComplete + textt.innerHTML + ' ';
+                    trantextComplete = trantextComplete + textt.innerHTML;
                 })
                 trantext.innerHTML = '<p>' + trantextComplete + '</p>';
                 // Remove hovered state from all other .textBoxes
