@@ -48,12 +48,6 @@ body {
     border: 1px solid rgba(0, 0, 0, 0);
 }
 
-.textBox:hover {
-    background: rgb(255, 255, 255);
-    border: 1px solid rgba(0, 0, 0, 0);
-    z-index: 999 !important;
-}
-
 .textBox p {
     display: none;
     white-space: nowrap;
@@ -65,20 +59,6 @@ body {
 
 .textBoxFontSizeOverride .textBox p {
     font-size: var(--textBoxFontSize) !important;
-}
-
-.textBox:hover p {
-    display: table;
-}
-
-.hovered {
-    background: rgb(255, 255, 255);
-    border: 1px solid rgba(0, 0, 0, 0);
-    z-index: 999 !important;
-}
-
-.hovered p {
-    display: table;
 }
 
 #pagesContainer {
@@ -270,6 +250,7 @@ body {
     visibility: visible;
     opacity: 1;
     max-width: 100vw;
+    font-size: 1rem;
 }
 
 .fetchError {
@@ -453,8 +434,6 @@ function initTextBoxes() {
     let textBoxes = document.querySelectorAll('.textBox');
     for (let i = 0; i < textBoxes.length; i++) {
         textBoxes[i].addEventListener('click', function (e) {
-            if (state.toggleOCRTextBoxes) {
-                this.classList.add('hovered');
                 let textValue = this.innerHTML;
                 let trantext = document.getElementById("trantext")
                 let trantextComplete = '';
@@ -468,7 +447,6 @@ function initTextBoxes() {
                         textBoxes[j].classList.remove('hovered');
                     }
                 }
-            }
         });
     }
 // When clicking off of a .textBox, remove the hovered state.
