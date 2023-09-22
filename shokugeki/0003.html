@@ -1,0 +1,928 @@
+<html><meta content="text/html;charset=utf-8" http-equiv="Content-Type"><meta content="utf-8" http-equiv="encoding"><meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=no"/><head><title>0003 | mokuro</title><style>:root {
+    --textBoxDisplay: initial;
+    --textBoxBorderHoverColor: rgba(237, 28, 36, 0.5);
+    --textBoxFontSize: 1em;
+
+    --colorBackground: #C4C3D0;
+    --color1: #f9f9fb;
+    --color2: #e2e2e9;
+    --color3: #071013;
+    --color3a: rgba(7, 16, 19, 0.3);
+
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    background-color: var(--colorBackground);
+}
+
+.notransition {
+    transition: none !important;
+}
+
+#topMenu *, .popup * {
+    font-family: "Open Sans", sans-serif;
+}
+
+.pageContainer * {
+    font-family: "Noto Sans JP", "Meiryo", "MS Gothic", sans-serif;
+}
+
+.pageContainer {
+    position: relative;
+    margin: 0 auto;
+}
+
+.pageContainer:hover .textBox {
+    border: 2px solid var(--textBoxBorderHoverColor);
+}
+
+.textBox {
+    display: var(--textBoxDisplay);
+    position: absolute;
+    padding: 0;
+    line-height: 1.1em;
+    font-size: 16pt;
+    white-space: nowrap;
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.textBox p {
+    display: none;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+    line-height: 1.1em;
+    margin: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+.textBoxFontSizeOverride .textBox p {
+    font-size: var(--textBoxFontSize) !important;
+}
+
+#pagesContainer {
+    display: inline-flex;
+    flex-direction: row;
+    overflow: visible;
+}
+
+#pagesContainer.inverted {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+
+.page {
+    display: none;
+    float: left;
+    margin: 0 -1px 0 0;
+}
+
+#leftAPage, #rightAPage, #leftAScreen, #rightAScreen {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#leftAPage, #rightAPage {
+    /*display: inline-block;*/
+    display: none;
+    position: absolute;
+    top: -5%;
+    width: 10%;
+    height: 110%;
+}
+
+#leftAPage {
+    left: -7%;
+}
+
+#rightAPage {
+    right: -7%;
+}
+
+#leftAScreen, #rightAScreen {
+    display: inline-block;
+    position: fixed;
+    top: 10vh;
+    width: 5vw;
+    height: 90vh;
+}
+
+#leftAScreen {
+    left: 0;
+}
+
+#rightAScreen {
+    right: 0;
+}
+
+#showMenuA {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 3em;
+    height: 3em;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#topMenu {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    background: var(--color1);
+    border-radius: 3px;
+    box-shadow: 0px 0px 8px 0px var(--color3a);
+    transition: all 0.5s ease-out, max-width 0s ease-in;
+    visibility: visible;
+    opacity: 1;
+    max-width: 100vw;
+    white-space: nowrap;
+}
+
+
+#topMenu.hidden {
+    max-width: 2.5em;
+    visibility: hidden;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 1s ease-in, max-width 0.5s ease-out;
+}
+
+#topMenu * {
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+#topMenu input {
+    height: 1.4em;
+    margin: 0 6px;
+}
+
+#pageIdxDisplay {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.menuButton {
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--color3);
+    border: none;
+    width: 2.5em;
+    height: 2.2em;
+    border-radius: 3px;
+}
+
+.menuButton svg {
+    max-height: 1.5em;
+}
+
+.menuButton:hover {
+    background-color: var(--color2);
+}
+
+.dropdown:hover #dropbtn {
+    background-color: var(--color2);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--color1);
+    box-shadow: 0px 0px 8px 0px var(--color3a);
+    z-index: 1000;
+    border-radius: 3px;
+    max-height: 90vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.dropdown-content .buttonRow {
+    display: flex;
+}
+
+.dropdown-content .menuButton {
+    flex: 1 1 auto;
+    align-self: center;
+}
+
+
+.dropdown-content .dropdown-option {
+    color: var(--color3);
+    padding: 10px 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    display: block;
+    border-radius: 3px;
+}
+
+.dropdown-content .dropdown-option:hover {
+    background-color: var(--color2);
+}
+
+.dropdown-content .dropdown-option [type="checkbox"] {
+    vertical-align: middle;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#trantext {
+    position: fixed;
+    z-index: 1000;
+    top: 3%;
+    right: 10%;
+    margin: 5px;
+    background: var(--color1);
+    border-radius: 3px;
+    box-shadow: 0px 0px 8px 0px var(--color3a);
+    transition: all 0.5s ease-out, max-width 0s ease-in;
+    visibility: visible;
+    opacity: 1;
+    max-width: 100vw;
+    font-size: 1rem;
+}
+
+.fetchError {
+    border-color: red;
+}
+
+.fetching {
+    border-color: blue;
+}
+
+#dimOverlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    width: min(720px, 80vw);
+    height: min(480px, 80vh);
+    margin-left: max(-360px, -40vw);
+    margin-top: max(-240px, -40vh);
+    z-index: 1002;
+    background-color: var(--color1);
+    color: var(--color3);
+    box-shadow: 0px 0px 10px 4px var(--color3a);
+    border-radius: 3px;
+    overflow: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    line-height: 1.5em;
+}
+
+
+/*hide arrows from number input*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+</style></head><body><a id="showMenuA" href="#"></a><div id="topMenu"><button id="buttonHideMenu" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(5 5)"><path d="m10.5 10.5-10-10z"/><path d="m10.5.5-10 10"/></g></svg></button><button id="buttonLeftLeft" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(5 6)"><path d="m8.5 8.5-4-4 4-4"/><path d="m4.5 8.5-4-4 4-4"/></g></svg></button><button id="buttonLeft" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><path d="m4.5 8.5-4-4 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(7 6)"/></svg></button><button id="buttonRight" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><path d="m.5 8.5 4-4-4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(9 6)"/></svg></button><button id="buttonRightRight" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(7 6)"><path d="m.5 8.5 4-4-4-4"/><path d="m4.5 8.5 4-4-4-4"/></g></svg></button><input required type="number" id="pageIdxInput" min="1" max="24" value="1" size="3"></input><span id="pageIdxDisplay"></span><span style="color:rgba(255,255,255,0.1);font-size:1px;">。</span><div class="dropdown"><button id="dropbtn" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 6.5h12"/><path d="m4.498 10.5h11.997"/><path d="m4.5 14.5h11.995"/></g></svg></button><div class="dropdown-content"><div class="buttonRow"><button id="menuFitToScreen" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 2)"><path d="m16.5 5.5v-5h-5"/><path d="m16.5.5-6 5.929"/><path d="m5.5 16.5-5 .023v-5.023"/><path d="m6.5 10.5-6 6"/></g></svg></button><button id="menuFitToWidth" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(1 2)"><path d="m.5.5v16.021"/><path d="m18.5.5v16.021"/><path d="m12.507 12.515 4-4-4-4.015"/><path d="m6.507 12.515-4-4 4-4.015"/><path d="m16.5 8.5h-14"/></g></svg></button><button id="menuOriginalSize" class="menuButton">1:1</button><button id="menuFullScreen" class="menuButton"><svg width="21px" height="21px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 2)"><path d="m16.5 5.5v-4.978l-5.5.014"/><path d="m16.5.522-6 5.907"/><path d="m11 16.521 5.5.002-.013-5.5"/><path d="m16.5 16.429-6-5.907"/><path d="m.5 5.5v-5h5.5"/><path d="m6.5 6.429-6-5.907"/><path d="m6 16.516-5.5.007v-5.023"/><path d="m6.5 10.5-6 6"/></g></svg></button></div><label class="dropdown-option">on page turn: <select id="menuDefaultZoom"><option value="fit to screen">fit to screen</option><option value="fit to width">fit to width</option><option value="original size">original size</option><option value="keep zoom level">keep zoom level</option></select></label><label class="dropdown-option">right to left<input type="checkbox" id="menuR2l"></input></label><label class="dropdown-option">display two pages <input type="checkbox" id="menuDoublePageView"></input></label><label class="dropdown-option">first page is cover <input type="checkbox" id="menuHasCover"></input></label><label class="dropdown-option">ctrl+mouse to move <input type="checkbox" id="menuCtrlToPan"></input></label><label class="dropdown-option">OCR enabled <input type="checkbox" id="menuDisplayOCR"></input></label><label class="dropdown-option">display boxes outlines <input type="checkbox" id="menuTextBoxBorders"></input></label><label class="dropdown-option">editable text <input type="checkbox" id="menuEditableText"></input></label><label class="dropdown-option">font size: <select id="menuFontSize"><option value="auto">auto</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="32">32</option><option value="40">40</option><option value="48">48</option><option value="60">60</option></select></label><label class="dropdown-option">e-ink mode <input type="checkbox" id="menuEInkMode"></input></label><label class="dropdown-option">toggle OCR text boxes on click<input type="checkbox" id="menuToggleOCRTextBoxes"></input></label><label class="dropdown-option">background color<input type="color" value="#C4C3D0" id="menuBackgroundColor"></input></label><a href="#" class="dropdown-option" id="menuReset">reset settings</a><a href="#" class="dropdown-option" id="menuAbout">about/help</a></div></div></div><button id="trantext"></button><div id="dimOverlay"></div><div id="popupAbout" class="popup">
+<p>HTML overlay generated with <a href="https://github.com/kha-white/mokuro" target="_blank">mokuro</a> version 0.1.7</p>
+<p>Instructions:</p>
+<ul>
+<li>Navigate pages with:
+    <ul>
+    <li>menu buttons</li>
+    <li>Page Up, Page Down, Home, End keys</li>
+    <li>by clicking left/right edge of the screen</li>
+    </ul>
+<li>Click &#10005; button to hide the menu. To bring it back, clip top-left corner of the screen.</li>
+<li>Select "editable boxes" option, to edit text recognized by OCR. Changes are not saved, it's only for ad-hoc fixes when using look-up dictionary.</li>
+<li>E-ink mode turns off animations and simulates display refresh on each page turn.</li>
+</ul>
+</div><a id="leftAScreen" href="#"></a><a id="rightAScreen" href="#"></a><div id="pagesContainer"><div id="page0" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/001.jpg&quot;);"><div class="textBox" style="left:736; top:125; width:158; height:450; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>「化ける」．．</p><p>ふりかけ</p><p>ですって．．</p></div><div class="textBox" style="left:446; top:58; width:386; height:44; font-size:31px; z-index:14;"><p>３．「化けるふりかけ</p></div><div class="textBox" style="left:822; top:663; width:94; height:162; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>さあ</p><p>そろそろ</p></div><div class="textBox" style="left:70; top:854; width:105; height:189; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>あがり</p><p>ますよ！</p></div><div class="textBox" style="left:798; top:1215; width:124; height:222; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>幸平創真！？</p><p>この男ー</p></div><div class="textBox" style="left:70; top:1212; width:233; height:222; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>いったい</p><p>どんな品を</p><p>出すつもり</p><p>なの</p></div></div></div><div id="page1" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/002.jpg&quot;);"><div class="textBox" style="left:864; top:139; width:53; height:287; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>おまちどお！</p></div><div class="textBox" style="left:128; top:185; width:248; height:471; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>いや</p><p>やっぱり</p><p>馬鹿にしてる！</p></div><div class="textBox" style="left:537; top:1418; width:405; height:105; font-size:32px; z-index:11;"><p>Ｌｉｎａｌｓｏｍｙ</p></div></div></div><div id="page2" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/003.jpg&quot;);"><div class="textBox" style="left:884; top:146; width:59; height:241; font-size:32px; z-index:20; writing-mode:vertical-rl;"><p>ほ：本当に</p></div><div class="textBox" style="left:540; top:146; width:115; height:288; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>ただの</p><p>ふりかけだ．．．</p></div><div class="textBox" style="left:389; top:160; width:117; height:186; font-size:27px; z-index:16; writing-mode:vertical-rl;"><p>こんな代物で</p><p>えりな様に</p><p>認められようと</p></div><div class="textBox" style="left:64; top:110; width:179; height:27; font-size:27px; z-index:21;"><p>食戟のソーマ</p></div><div class="textBox" style="left:56; top:228; width:100; height:220; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>本気で思って</p><p>いるのか．．．！？</p></div><div class="textBox" style="left:906; top:666; width:21; height:62; font-size:21px; z-index:22; writing-mode:vertical-rl;"><p>．．．．．．</p></div><div class="textBox" style="left:196; top:696; width:147; height:144; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>試験は</p><p>これで</p><p>終了です</p></div><div class="textBox" style="left:833; top:860; width:88; height:182; font-size:32px; z-index:19; writing-mode:vertical-rl;"><p>話に</p><p>ならないわ</p></div><div class="textBox" style="left:284; top:929; width:111; height:169; font-size:30px; z-index:18; writing-mode:vertical-rl;"><p>「神の舌」とまで</p><p>呼ばれる味覚を</p><p>持つ私は</p></div><div class="textBox" style="left:37; top:928; width:145; height:170; font-size:31px; z-index:13; writing-mode:vertical-rl;"><p>幼い頃から</p><p>ニ流シェフの</p><p>味見役を</p><p>任されてきた！！</p></div><div class="textBox" style="left:518; top:1170; width:135; height:176; font-size:31px; z-index:14; writing-mode:vertical-rl;"><p>一年先まで</p><p>予約が埋まる</p><p>料亭の品に</p></div><div class="textBox" style="left:317; top:1165; width:178; height:155; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>パリに</p><p>店を構える</p><p>三ツ星の</p><p>看板料理</p></div><div class="textBox" style="left:50; top:1167; width:162; height:320; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>私の食卓には</p><p>贅と趣向をこらした</p><p>高級品だけが並ぶ．．</p></div></div></div><div id="page3" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/004.jpg&quot;);"><div class="textBox" style="left:450; top:129; width:158; height:399; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>まさに美食の</p><p>てんじょう、せ</p><p>〜</p><p>．．．</p></div><div class="textBox" style="left:451; top:253; width:63; height:187; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>世界ノ</p></div><div class="textBox" style="left:272; top:676; width:125; height:166; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>所詮</p><p>一流料理人の</p><p>仕事ね．．．</p></div><div class="textBox" style="left:808; top:862; width:158; height:185; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>そこで</p><p>生きてきた</p><p>私に</p></div><div class="textBox" style="left:450; top:863; width:302; height:256; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>「ふりかけ」</p><p>などという</p><p>料理と</p><p>呼べるかすら</p><p>微妙な物を</p><p>出すなんてー</p></div><div class="textBox" style="left:100; top:818; width:89; height:211; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>全く食指が</p><p>動かなかったわ</p></div><div class="textBox" style="left:452; top:1240; width:183; height:177; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>この品の</p><p>本当の姿は</p><p>これから</p><p>なのに</p></div><div class="textBox" style="left:256; top:1206; width:76; height:151; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>．．．どういう</p><p>意味かしら</p></div></div></div><div id="page4" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/005.jpg&quot;);"><div class="textBox" style="left:625; top:171; width:158; height:185; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>あれは．．．？</p><p>卵の陰に</p><p>何かー</p></div><div class="textBox" style="left:682; top:539; width:258; height:184; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>薄い金色で</p><p>半透明の</p><p>物体が</p><p>敷き詰め</p><p>られてる．．．</p></div><div class="textBox" style="left:458; top:184; width:139; height:559; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>白米の上で</p></div><div class="textBox" style="left:848; top:779; width:93; height:146; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>まぁ</p><p>見てなよ</p></div><div class="textBox" style="left:439; top:182; width:178; height:1238; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>白米の上でこそでしょう！</p></div><div class="textBox" style="left:873; top:1073; width:62; height:389; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>ふりかけの真価は</p></div><div class="textBox" style="left:53; top:1107; width:81; height:348; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>仕上げだっー</p></div></div></div><div id="page5" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/006.jpg&quot;);"><div class="textBox" style="left:596; top:172; width:22; height:92; font-size:22px; z-index:13; writing-mode:vertical-rl;"><p>．．．．．．？</p></div><div class="textBox" style="left:275; top:299; width:48; height:94; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>あ．．．</p></div><div class="textBox" style="left:73; top:487; width:151; height:125; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>ごはんの</p><p>熱で</p><p>溶けて</p></div><div class="textBox" style="left:861; top:1289; width:116; height:96; font-size:17px; z-index:11;"><p>．．．</p></div></div></div><div id="page6" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/007.jpg&quot;);"><div class="textBox" style="left:814; top:157; width:131; height:124; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>と：</p><p>溶けると</p><p>同時に</p></div><div class="textBox" style="left:46; top:173; width:93; height:223; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>あっ．．．</p></div><div class="textBox" style="left:831; top:721; width:99; height:111; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>この</p><p>匂いは</p></div><div class="textBox" style="left:526; top:404; width:124; height:187; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>卵が次々と</p><p>コーティング</p><p>されていく！？</p></div><div class="textBox" style="left:761; top:1059; width:169; height:209; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>じっくりと</p><p>煮込まれた</p><p>鶏肉の</p></div><div class="textBox" style="left:89; top:743; width:118; height:196; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>鳥？</p></div><div class="textBox" style="left:145; top:996; width:216; height:213; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>まろやかな</p><p>匂いが</p><p>立ち上って</p><p>くるーーー</p></div><div class="textBox" style="left:29; top:1003; width:74; height:232; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>これがー</p></div><div class="textBox" style="left:797; top:1514; width:186; height:44; font-size:21px; z-index:18;"><p>Ｌｉｎｇｎｏｄ</p><p>ｉＰｏｄｅｌｏ</p></div></div></div><div id="page7" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/008.jpg&quot;);"><div class="textBox" style="left:673; top:175; width:277; height:231; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>化ける</p><p>ふりかけ</p><p>ごはん</p><p>．．．．．．．．！？</p></div></div></div><div id="page8" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/009.jpg&quot;);"><div class="textBox" style="left:676; top:295; width:126; height:183; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>さっきまでと</p><p>見映えが</p><p>まるで違う！！</p></div><div class="textBox" style="left:525; top:297; width:38; height:151; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>いったい．．</p></div><div class="textBox" style="left:163; top:153; width:67; height:118; font-size:28px; z-index:15; writing-mode:vertical-rl;"><p>一口だけ</p></div><div class="textBox" style="left:402; top:326; width:78; height:152; font-size:30px; z-index:14; writing-mode:vertical-rl;"><p>どんな味が</p><p>するのか</p></div><div class="textBox" style="left:59; top:340; width:121; height:122; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>味見して</p><p>さしあげ</p><p>ます</p></div><div class="textBox" style="left:60; top:587; width:138; height:180; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>し．．．</p><p>審査して</p><p>ほしければ</p></div><div class="textBox" style="left:559; top:1020; width:174; height:244; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>さっさと</p><p>器を寄越し</p><p>なさい！！</p></div></div></div><div id="page9" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/010.jpg&quot;);"><div class="textBox" style="left:87; top:178; width:484; height:100; font-size:32px; z-index:10;"><p>おあがりよ</p></div><div class="textBox" style="left:164; top:881; width:40; height:125; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>．．．っ</p></div><div class="textBox" style="left:852; top:1509; width:150; height:51; font-size:19px; z-index:11;"><p>ｍａｎｃｅｂ．</p><p>ｉＰａｄｅｒｉｏ</p></div><div class="textBox" style="left:470; top:1162; width:21; height:79; font-size:21px; z-index:14; writing-mode:vertical-rl;"><p>．．．．．．</p></div><div class="textBox" style="left:358; top:1305; width:44; height:143; font-size:29px; z-index:12; writing-mode:vertical-rl;"><p>．．．？</p><p>．．．</p></div></div></div><div id="page10" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/011.jpg&quot;);"><div class="textBox" style="left:840; top:121; width:56; height:216; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>「クン、</p></div><div class="textBox" style="left:302; top:244; width:55; height:104; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>はっ</p></div><div class="textBox" style="left:62; top:106; width:161; height:31; font-size:26px; z-index:18;"><p>食戟のソース</p></div><div class="textBox" style="left:311; top:478; width:63; height:120; font-size:27px; z-index:16; writing-mode:vertical-rl;"><p>わ．．．私と</p><p>したことが</p></div><div class="textBox" style="left:65; top:468; width:57; height:177; font-size:18px; z-index:14; writing-mode:vertical-rl;"><p>審査を忘れて</p><p>味わってしまった．．．</p></div><div class="textBox" style="left:817; top:1100; width:124; height:151; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>二口目</p><p>イッちゃう</p><p>の？</p></div><div class="textBox" style="left:207; top:921; width:168; height:111; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>今の</p><p>食感は</p><p>何！？</p></div><div class="textBox" style="left:40; top:839; width:47; height:191; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>あれー．．．</p></div><div class="textBox" style="left:506; top:1322; width:125; height:179; font-size:29px; z-index:10; writing-mode:vertical-rl;"><p>一口だけって</p><p>聞いた気が</p><p>するけど</p></div></div></div><div id="page11" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/012.jpg&quot;);"><div class="textBox" style="left:798; top:318; width:144; height:149; font-size:32px; z-index:18; writing-mode:vertical-rl;"><p>何か文句</p><p>あります</p><p>か！？</p></div><div class="textBox" style="left:67; top:251; width:70; height:242; font-size:32px; z-index:19; writing-mode:vertical-rl;"><p>この食感！！</p></div><div class="textBox" style="left:669; top:603; width:101; height:228; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>「煮凝り」</p><p>．．．ね？</p></div><div class="textBox" style="left:473; top:348; width:175; height:128; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>冗談</p><p>だってば</p><p>ゆっくり</p><p>食いな</p></div><div class="textBox" style="left:523; top:564; width:101; height:251; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>大正解！</p><p>この四角いのは</p></div><div class="textBox" style="left:85; top:568; width:146; height:286; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>手羽先の</p><p>煮凝りだ！</p></div><div class="textBox" style="left:812; top:941; width:152; height:271; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>「怠凝り」</p><p>とは</p></div><div class="textBox" style="left:332; top:942; width:222; height:243; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>ゼラチン質の多い</p><p>肉や魚の煮汁が</p><p>冷えて</p><p>ゼリー状に</p><p>凝固したもの</p></div><div class="textBox" style="left:68; top:948; width:235; height:139; font-size:28px; z-index:13; writing-mode:vertical-rl;"><p>手羽先を</p><p>鰹だし・酒</p><p>薄口醤油で</p><p>煮込んで</p><p>手羽の</p><p>ゼラチン質と</p><p>旨味を抽出</p></div><div class="textBox" style="left:72; top:1122; width:26; height:74; font-size:26px; z-index:20; writing-mode:vertical-rl;"><p>冷ます！</p></div><div class="textBox" style="left:68; top:1303; width:160; height:145; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>その煮汁を</p><p>冷やして</p><p>固め</p><p>細かく切る</p></div></div></div><div id="page12" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/013.jpg&quot;);"><div class="textBox" style="left:544; top:119; width:32; height:141; font-size:32px; z-index:23; writing-mode:vertical-rl;"><p>そうか！</p></div><div class="textBox" style="left:423; top:170; width:79; height:176; font-size:30px; z-index:19; writing-mode:vertical-rl;"><p>熱々ごはんに</p><p>ふりかければ</p></div><div class="textBox" style="left:131; top:133; width:36; height:152; font-size:32px; z-index:22; writing-mode:vertical-rl;"><p>！：なるほど</p></div><div class="textBox" style="left:806; top:329; width:134; height:205; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>あの大鍋で</p><p>作っていたのは</p><p>煮凝りか．．．</p></div><div class="textBox" style="left:464; top:615; width:126; height:180; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>とろりとした</p><p>煮汁のコクと</p><p>塩っ気が</p></div><div class="textBox" style="left:293; top:676; width:160; height:205; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>ふわふわの</p><p>卵そぼろの</p><p>やさしい甘さを</p><p>引き立てている</p></div><div class="textBox" style="left:172; top:364; width:218; height:175; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>溶け出した</p><p>手羽の煮汁が</p><p>卵そぼろに</p><p>「ぷるん」と</p><p>絡みつく！</p></div><div class="textBox" style="left:62; top:373; width:84; height:181; font-size:32px; z-index:18; writing-mode:vertical-rl;"><p>言うなれば</p><p>この煮凝りは</p></div><div class="textBox" style="left:71; top:635; width:193; height:207; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>そして噛む度に</p><p>ふわふわと</p><p>とろとろが</p><p>口の中を</p><p>撫で回していく</p></div><div class="textBox" style="left:619; top:590; width:356; height:617; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>鶏肉の旨味が</p><p>溶けこんだ濃夏よく。</p><p>濃厚なスープ！！</p></div><div class="textBox" style="left:236; top:954; width:96; height:283; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>溶けた煮凝りが</p><p>卵の美味しさを</p></div><div class="textBox" style="left:123; top:953; width:111; height:323; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>ん</p><p>格段に跳ね上げて</p><p>いるんだわ．．．！</p></div><div class="textBox" style="left:803; top:1514; width:181; height:45; font-size:18px; z-index:20;"><p>ｍａｎｇ</p><p>ｒｅａｔｅｎｔ．</p></div><div class="textBox" style="left:536; top:1317; width:41; height:161; font-size:32px; z-index:21; writing-mode:vertical-rl;"><p>これは．．．</p></div></div></div><div id="page13" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/014.jpg&quot;);"><div class="textBox" style="left:482; top:129; width:251; height:188; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>今まで</p><p>食べてきた</p><p>どの</p><p>料理にも</p><p>似てない</p></div><div class="textBox" style="left:303; top:165; width:143; height:189; font-size:29px; z-index:13; writing-mode:vertical-rl;"><p>とーよどーよ！</p><p>食わずに</p><p>帰らねーで</p><p>よかったろ？</p></div><div class="textBox" style="left:472; top:546; width:239; height:360; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>私が</p><p>知らなかった</p><p>味の世界ー！</p></div><div class="textBox" style="left:364; top:600; width:83; height:142; font-size:24px; z-index:16; writing-mode:vertical-rl;"><p>こんな</p><p>ありふれた</p><p>メニューでも</p></div><div class="textBox" style="left:64; top:407; width:136; height:143; font-size:26px; z-index:15; writing-mode:vertical-rl;"><p>だ．．．</p><p>黙りなさい！</p><p>まだ審査は</p><p>途中よ．．．！</p></div><div class="textBox" style="left:72; top:700; width:131; height:177; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>創意工夫で</p><p>逸品に</p><p>化けさせる！</p></div><div class="textBox" style="left:545; top:1012; width:39; height:108; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>これが</p></div><div class="textBox" style="left:126; top:1021; width:131; height:277; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>ゆきひらの</p><p>料理だ！</p></div></div></div><div id="page14" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/015.jpg&quot;);"><div class="textBox" style="left:842; top:159; width:91; height:155; font-size:30px; z-index:16; writing-mode:vertical-rl;"><p>食の最高峰</p><p>遠月学園：</p></div><div class="textBox" style="left:525; top:153; width:102; height:217; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>一流料理人達の</p><p>聖域</p></div><div class="textBox" style="left:830; top:450; width:109; height:290; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>美食の天上世界に</p><p>生きるこの私が</p></div><div class="textBox" style="left:315; top:204; width:238; height:580; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>．．．庶民代表</p><p>のような男が作った</p></div><div class="textBox" style="left:533; top:589; width:87; height:250; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>認めるわけには</p><p>いかないのよっ</p></div><div class="textBox" style="left:54; top:546; width:100; height:186; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>料理</p><p>なんかっ．．．</p></div><div class="textBox" style="left:891; top:906; width:49; height:93; font-size:32px; z-index:18; writing-mode:vertical-rl;"><p>認める</p></div><div class="textBox" style="left:696; top:908; width:32; height:150; font-size:27px; z-index:17; writing-mode:vertical-rl;"><p>わけには．．．</p></div><div class="textBox" style="left:60; top:1315; width:111; height:175; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>この味は</p><p>まるで．．．</p></div></div></div><div id="page15" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/016.jpg&quot;);"><div class="textBox" style="left:917; top:141; width:51; height:179; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>天使の羽で</p></div><div class="textBox" style="left:629; top:154; width:142; height:181; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>愛撫されて</p><p>いるかの</p><p>ような．．．</p></div><div class="textBox" style="left:852; top:1511; width:134; height:51; font-size:21px; z-index:13;"><p>．．．</p><p>Ｉｅｃｄｅｒ．ｔｏ</p></div><div class="textBox" style="left:70; top:1128; width:175; height:392; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>来ないで</p><p>来ないでよ！</p></div></div></div><div id="page16" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/017.jpg&quot;);"><div class="textBox" style="left:98; top:128; width:137; height:353; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>認めたく</p><p>ないのにっ．．．</p></div><div class="textBox" style="left:42; top:460; width:78; height:127; font-size:32px; z-index:13;"><p>．．．舌が</p></div><div class="textBox" style="left:104; top:595; width:91; height:169; font-size:32px; z-index:12;"><p>躰が。</p></div><div class="textBox" style="left:0; top:921; width:259; height:602; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>ＲＴ＠しちゃうっ！！</p></div></div></div><div id="page17" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/018.jpg&quot;);"><div class="textBox" style="left:207; top:739; width:112; height:162; font-size:29px; z-index:11; writing-mode:vertical-rl;"><p>確かにウチは</p><p>ちっこい</p><p>定食屋だし</p></div><div class="textBox" style="left:60; top:976; width:133; height:161; font-size:26px; z-index:10; writing-mode:vertical-rl;"><p>アンタらが</p><p>食の上流階級</p><p>なのも本当</p><p>なんだろーね</p></div><div class="textBox" style="left:82; top:1353; width:31; height:138; font-size:28px; z-index:12; writing-mode:vertical-rl;"><p>けどさー</p></div></div></div><div id="page18" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/019.jpg&quot;);"><div class="textBox" style="left:562; top:189; width:178; height:178; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>上座に</p><p>ふんぞり</p><p>返ってる</p><p>だけじゃあ</p></div><div class="textBox" style="left:393; top:270; width:132; height:175; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>作れねー</p><p>物もあるぜ</p><p>きっと．．．！</p></div><div class="textBox" style="left:915; top:810; width:28; height:124; font-size:20px; z-index:16; writing-mode:vertical-rl;"><p>えりな様っ．．．</p></div><div class="textBox" style="left:456; top:828; width:73; height:118; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>さぁ</p><p>どーだい</p></div><div class="textBox" style="left:376; top:1067; width:132; height:173; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>言って</p><p>みな！</p></div><div class="textBox" style="left:203; top:821; width:89; height:120; font-size:26px; z-index:13; writing-mode:vertical-rl;"><p>ゆきひら流</p><p>ふりかけ</p><p>ごはん</p></div><div class="textBox" style="left:118; top:825; width:27; height:96; font-size:27px; z-index:17; writing-mode:vertical-rl;"><p>美味いか</p></div><div class="textBox" style="left:60; top:853; width:27; height:95; font-size:27px; z-index:18; writing-mode:vertical-rl;"><p>不味いか</p></div><div class="textBox" style="left:810; top:1514; width:172; height:44; font-size:21px; z-index:15;"><p>．．．</p><p>．．．</p></div></div></div><div id="page19" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/020.jpg&quot;);"><div class="textBox" style="left:511; top:146; width:169; height:210; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>もし</p><p>もし！</p><p>もしもし</p><p>聞こえてる！？</p><p>ママぁ～！</p></div><div class="textBox" style="left:90; top:154; width:149; height:194; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>あのなきり</p><p>薙切えりなが</p><p>審査員だったん</p><p>だよぅ～！！</p></div><div class="textBox" style="left:807; top:675; width:140; height:156; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>運が</p><p>悪すぎるよ！</p><p>ぜったい</p><p>無理だよう～</p></div><div class="textBox" style="left:326; top:681; width:164; height:162; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>僕もう</p><p>おうち</p><p>帰るー！！</p></div><div class="textBox" style="left:708; top:1032; width:92; height:146; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>お．．．</p><p>お前は！</p></div><div class="textBox" style="left:312; top:954; width:24; height:108; font-size:22px; z-index:16; writing-mode:vertical-rl;"><p>まさか．．．</p></div><div class="textBox" style="left:440; top:1331; width:144; height:115; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>まさか</p><p>薙切</p><p>えりなの</p><p>審査をー</p></div></div></div><div id="page20" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/021.jpg&quot;);"><div class="textBox" style="left:839; top:501; width:39; height:166; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>なんか．．．</p></div><div class="textBox" style="left:639; top:806; width:75; height:290; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>だったわ．．．</p></div><div class="textBox" style="left:14; top:567; width:165; height:579; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>あれぇぇ！？</p></div><div class="textBox" style="left:880; top:1292; width:28; height:97; font-size:28px; z-index:16; writing-mode:vertical-rl;"><p>美味いか</p></div><div class="textBox" style="left:831; top:1384; width:30; height:100; font-size:28px; z-index:15; writing-mode:vertical-rl;"><p>不味いか</p></div><div class="textBox" style="left:315; top:1337; width:99; height:133; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>言って</p><p>みな！</p></div><div class="textBox" style="left:64; top:1371; width:39; height:91; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>．．．ま</p></div></div></div><div id="page21" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/022.jpg&quot;);"><div class="textBox" style="left:454; top:142; width:121; height:525; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>不味いわよっ！</p></div><div class="textBox" style="left:42; top:195; width:169; height:548; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>あれぇぇ！？</p></div><div class="textBox" style="left:845; top:829; width:60; height:127; font-size:32px; z-index:17; writing-mode:vertical-rl;"><p>何よ！</p></div><div class="textBox" style="left:687; top:860; width:86; height:175; font-size:32px; z-index:16; writing-mode:vertical-rl;"><p>何よ！！</p></div><div class="textBox" style="left:830; top:1125; width:122; height:125; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>あんな</p><p>偉そうな</p><p>物言い．．．</p></div><div class="textBox" style="left:120; top:834; width:92; height:206; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>何よ！！</p></div><div class="textBox" style="left:65; top:1098; width:127; height:147; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>許せ</p><p>ない！</p></div><div class="textBox" style="left:447; top:1325; width:125; height:131; font-size:32px; z-index:14; writing-mode:vertical-rl;"><p>この薙切</p><p>えりなに</p><p>対して！</p></div><div class="textBox" style="left:349; top:1372; width:24; height:90; font-size:21px; z-index:18; writing-mode:vertical-rl;"><p>っ</p></div><div class="textBox" style="left:100; top:1387; width:22; height:97; font-size:22px; z-index:19; writing-mode:vertical-rl;"><p>．．．．．．</p></div></div></div><div id="page22" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/023.jpg&quot;);"><div class="textBox" style="left:767; top:143; width:162; height:185; font-size:32px; z-index:12; writing-mode:vertical-rl;"><p>幸平創真：：</p><p>君のような</p><p>人間は</p></div><div class="textBox" style="left:320; top:178; width:145; height:398; font-size:32px; z-index:10; writing-mode:vertical-rl;"><p>遠月学園には</p><p>必要ありません！！</p></div><div class="textBox" style="left:243; top:375; width:54; height:120; font-size:24px; z-index:16; writing-mode:vertical-rl;"><p>もしもし</p><p>えりなです</p></div><div class="textBox" style="left:76; top:371; width:39; height:146; font-size:27px; z-index:17; writing-mode:vertical-rl;"><p>おじい様にー</p></div><div class="textBox" style="left:719; top:812; width:189; height:242; font-size:32px; z-index:11; writing-mode:vertical-rl;"><p>学園総帥に</p><p>つないで</p><p>下さい</p></div><div class="textBox" style="left:544; top:1068; width:104; height:152; font-size:32px; z-index:15; writing-mode:vertical-rl;"><p>本日の</p><p>編入試験</p></div><div class="textBox" style="left:239; top:821; width:174; height:152; font-size:32px; z-index:13; writing-mode:vertical-rl;"><p>Ｏ名</p><p>です</p></div><div class="textBox" style="left:766; top:1384; width:137; height:186; font-size:32.0px; z-index:14;"><p>．．．</p><p>．．．</p></div><div class="textBox" style="left:547; top:1285; width:28; height:141; font-size:32px; z-index:18; writing-mode:vertical-rl;"><p>合格者は</p></div></div></div><div id="page23" class="page"><div class="pageContainer" style="width:1013; height:1600; background-image:url(&quot;0003/024.jpg&quot;);"><div class="textBox" style="left:532; top:1095; width:382; height:314; font-size:32px; z-index:10;"><p>介護</p></div></div></div><a id="leftAPage" href="#"></a><a id="rightAPage" href="#"></a></div><script>(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.panzoom=f()}})(function(){var define,module,exports;return function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r}()({1:[function(require,module,exports){"use strict";var wheel=require("wheel");var animate=require("amator");var eventify=require("ngraph.events");var kinetic=require("./lib/kinetic.js");var createTextSelectionInterceptor=require("./lib/createTextSelectionInterceptor.js");var domTextSelectionInterceptor=createTextSelectionInterceptor();var fakeTextSelectorInterceptor=createTextSelectionInterceptor(true);var Transform=require("./lib/transform.js");var makeSvgController=require("./lib/svgController.js");var makeDomController=require("./lib/domController.js");var defaultZoomSpeed=1;var defaultDoubleTapZoomSpeed=1.75;var doubleTapSpeedInMS=300;module.exports=createPanZoom;function createPanZoom(domElement,options){options=options||{};var panController=options.controller;if(!panController){if(makeSvgController.canAttach(domElement)){panController=makeSvgController(domElement,options)}else if(makeDomController.canAttach(domElement)){panController=makeDomController(domElement,options)}}if(!panController){throw new Error("Cannot create panzoom for the current type of dom element")}var owner=panController.getOwner();var storedCTMResult={x:0,y:0};var isDirty=false;var transform=new Transform;if(panController.initTransform){panController.initTransform(transform)}var filterKey=typeof options.filterKey==="function"?options.filterKey:noop;var pinchSpeed=typeof options.pinchSpeed==="number"?options.pinchSpeed:1;var bounds=options.bounds;var maxZoom=typeof options.maxZoom==="number"?options.maxZoom:Number.POSITIVE_INFINITY;var minZoom=typeof options.minZoom==="number"?options.minZoom:0;var boundsPadding=typeof options.boundsPadding==="number"?options.boundsPadding:.05;var zoomDoubleClickSpeed=typeof options.zoomDoubleClickSpeed==="number"?options.zoomDoubleClickSpeed:defaultDoubleTapZoomSpeed;var beforeWheel=options.beforeWheel||noop;var beforeMouseDown=options.beforeMouseDown||noop;var speed=typeof options.zoomSpeed==="number"?options.zoomSpeed:defaultZoomSpeed;var transformOrigin=parseTransformOrigin(options.transformOrigin);var textSelection=options.enableTextSelection?fakeTextSelectorInterceptor:domTextSelectionInterceptor;validateBounds(bounds);if(options.autocenter){autocenter()}var frameAnimation;var lastTouchEndTime=0;var lastSingleFingerOffset;var touchInProgress=false;var panstartFired=false;var mouseX;var mouseY;var pinchZoomLength;var smoothScroll;if("smoothScroll"in options&&!options.smoothScroll){smoothScroll=rigidScroll()}else{smoothScroll=kinetic(getPoint,scroll,options.smoothScroll)}var moveByAnimation;var zoomToAnimation;var multiTouch;var paused=false;listenForEvents();var api={dispose:dispose,moveBy:internalMoveBy,moveTo:moveTo,smoothMoveTo:smoothMoveTo,centerOn:centerOn,zoomTo:publicZoomTo,zoomAbs:zoomAbs,smoothZoom:smoothZoom,smoothZoomAbs:smoothZoomAbs,showRectangle:showRectangle,pause:pause,resume:resume,isPaused:isPaused,getTransform:getTransformModel,getMinZoom:getMinZoom,setMinZoom:setMinZoom,getMaxZoom:getMaxZoom,setMaxZoom:setMaxZoom,getTransformOrigin:getTransformOrigin,setTransformOrigin:setTransformOrigin,getZoomSpeed:getZoomSpeed,setZoomSpeed:setZoomSpeed};eventify(api);var initialX=typeof options.initialX==="number"?options.initialX:transform.x;var initialY=typeof options.initialY==="number"?options.initialY:transform.y;var initialZoom=typeof options.initialZoom==="number"?options.initialZoom:transform.scale;if(initialX!=transform.x||initialY!=transform.y||initialZoom!=transform.Scale){zoomAbs(initialX,initialY,initialZoom)}return api;function pause(){releaseEvents();paused=true}function resume(){if(paused){listenForEvents();paused=false}}function isPaused(){return paused}function showRectangle(rect){var clientRect=owner.getBoundingClientRect();var size=transformToScreen(clientRect.width,clientRect.height);var rectWidth=rect.right-rect.left;var rectHeight=rect.bottom-rect.top;if(!Number.isFinite(rectWidth)||!Number.isFinite(rectHeight)){throw new Error("Invalid rectangle")}var dw=size.x/rectWidth;var dh=size.y/rectHeight;var scale=Math.min(dw,dh);transform.x=-(rect.left+rectWidth/2)*scale+size.x/2;transform.y=-(rect.top+rectHeight/2)*scale+size.y/2;transform.scale=scale}function transformToScreen(x,y){if(panController.getScreenCTM){var parentCTM=panController.getScreenCTM();var parentScaleX=parentCTM.a;var parentScaleY=parentCTM.d;var parentOffsetX=parentCTM.e;var parentOffsetY=parentCTM.f;storedCTMResult.x=x*parentScaleX-parentOffsetX;storedCTMResult.y=y*parentScaleY-parentOffsetY}else{storedCTMResult.x=x;storedCTMResult.y=y}return storedCTMResult}function autocenter(){var w;var h;var left=0;var top=0;var sceneBoundingBox=getBoundingBox();if(sceneBoundingBox){left=sceneBoundingBox.left;top=sceneBoundingBox.top;w=sceneBoundingBox.right-sceneBoundingBox.left;h=sceneBoundingBox.bottom-sceneBoundingBox.top}else{var ownerRect=owner.getBoundingClientRect();w=ownerRect.width;h=ownerRect.height}var bbox=panController.getBBox();if(bbox.width===0||bbox.height===0){return}var dh=h/bbox.height;var dw=w/bbox.width;var scale=Math.min(dw,dh);transform.x=-(bbox.left+bbox.width/2)*scale+w/2+left;transform.y=-(bbox.top+bbox.height/2)*scale+h/2+top;transform.scale=scale}function getTransformModel(){return transform}function getMinZoom(){return minZoom}function setMinZoom(newMinZoom){minZoom=newMinZoom}function getMaxZoom(){return maxZoom}function setMaxZoom(newMaxZoom){maxZoom=newMaxZoom}function getTransformOrigin(){return transformOrigin}function setTransformOrigin(newTransformOrigin){transformOrigin=parseTransformOrigin(newTransformOrigin)}function getZoomSpeed(){return speed}function setZoomSpeed(newSpeed){if(!Number.isFinite(newSpeed)){throw new Error("Zoom speed should be a number")}speed=newSpeed}function getPoint(){return{x:transform.x,y:transform.y}}function moveTo(x,y){transform.x=x;transform.y=y;keepTransformInsideBounds();triggerEvent("pan");makeDirty()}function moveBy(dx,dy){moveTo(transform.x+dx,transform.y+dy)}function keepTransformInsideBounds(){var boundingBox=getBoundingBox();if(!boundingBox)return;var adjusted=false;var clientRect=getClientRect();var diff=boundingBox.left-clientRect.right;if(diff>0){transform.x+=diff;adjusted=true}diff=boundingBox.right-clientRect.left;if(diff<0){transform.x+=diff;adjusted=true}diff=boundingBox.top-clientRect.bottom;if(diff>0){transform.y+=diff;adjusted=true}diff=boundingBox.bottom-clientRect.top;if(diff<0){transform.y+=diff;adjusted=true}return adjusted}function getBoundingBox(){if(!bounds)return;if(typeof bounds==="boolean"){var ownerRect=owner.getBoundingClientRect();var sceneWidth=ownerRect.width;var sceneHeight=ownerRect.height;return{left:sceneWidth*boundsPadding,top:sceneHeight*boundsPadding,right:sceneWidth*(1-boundsPadding),bottom:sceneHeight*(1-boundsPadding)}}return bounds}function getClientRect(){var bbox=panController.getBBox();var leftTop=client(bbox.left,bbox.top);return{left:leftTop.x,top:leftTop.y,right:bbox.width*transform.scale+leftTop.x,bottom:bbox.height*transform.scale+leftTop.y}}function client(x,y){return{x:x*transform.scale+transform.x,y:y*transform.scale+transform.y}}function makeDirty(){isDirty=true;frameAnimation=window.requestAnimationFrame(frame)}function zoomByRatio(clientX,clientY,ratio){if(isNaN(clientX)||isNaN(clientY)||isNaN(ratio)){throw new Error("zoom requires valid numbers")}var newScale=transform.scale*ratio;if(newScale<minZoom){if(transform.scale===minZoom)return;ratio=minZoom/transform.scale}if(newScale>maxZoom){if(transform.scale===maxZoom)return;ratio=maxZoom/transform.scale}var size=transformToScreen(clientX,clientY);transform.x=size.x-ratio*(size.x-transform.x);transform.y=size.y-ratio*(size.y-transform.y);if(bounds&&boundsPadding===1&&minZoom===1){transform.scale*=ratio;keepTransformInsideBounds()}else{var transformAdjusted=keepTransformInsideBounds();if(!transformAdjusted)transform.scale*=ratio}triggerEvent("zoom");makeDirty()}function zoomAbs(clientX,clientY,zoomLevel){var ratio=zoomLevel/transform.scale;zoomByRatio(clientX,clientY,ratio)}function centerOn(ui){var parent=ui.ownerSVGElement;if(!parent)throw new Error("ui element is required to be within the scene");var clientRect=ui.getBoundingClientRect();var cx=clientRect.left+clientRect.width/2;var cy=clientRect.top+clientRect.height/2;var container=parent.getBoundingClientRect();var dx=container.width/2-cx;var dy=container.height/2-cy;internalMoveBy(dx,dy,true)}function smoothMoveTo(x,y){internalMoveBy(x-transform.x,y-transform.y,true)}function internalMoveBy(dx,dy,smooth){if(!smooth){return moveBy(dx,dy)}if(moveByAnimation)moveByAnimation.cancel();var from={x:0,y:0};var to={x:dx,y:dy};var lastX=0;var lastY=0;moveByAnimation=animate(from,to,{step:function(v){moveBy(v.x-lastX,v.y-lastY);lastX=v.x;lastY=v.y}})}function scroll(x,y){cancelZoomAnimation();moveTo(x,y)}function dispose(){releaseEvents()}function listenForEvents(){owner.addEventListener("mousedown",onMouseDown,{passive:false});owner.addEventListener("dblclick",onDoubleClick,{passive:false});owner.addEventListener("touchstart",onTouch,{passive:false});owner.addEventListener("keydown",onKeyDown,{passive:false});wheel.addWheelListener(owner,onMouseWheel,{passive:false});makeDirty()}function releaseEvents(){wheel.removeWheelListener(owner,onMouseWheel);owner.removeEventListener("mousedown",onMouseDown);owner.removeEventListener("keydown",onKeyDown);owner.removeEventListener("dblclick",onDoubleClick);owner.removeEventListener("touchstart",onTouch);if(frameAnimation){window.cancelAnimationFrame(frameAnimation);frameAnimation=0}smoothScroll.cancel();releaseDocumentMouse();releaseTouches();textSelection.release();triggerPanEnd()}function frame(){if(isDirty)applyTransform()}function applyTransform(){isDirty=false;panController.applyTransform(transform);triggerEvent("transform");frameAnimation=0}function onKeyDown(e){var x=0,y=0,z=0;if(e.keyCode===38){y=1}else if(e.keyCode===40){y=-1}else if(e.keyCode===37){x=1}else if(e.keyCode===39){x=-1}else if(e.keyCode===189||e.keyCode===109){z=1}else if(e.keyCode===187||e.keyCode===107){z=-1}if(filterKey(e,x,y,z)){return}if(x||y){e.preventDefault();e.stopPropagation();var clientRect=owner.getBoundingClientRect();var offset=Math.min(clientRect.width,clientRect.height);var moveSpeedRatio=.05;var dx=offset*moveSpeedRatio*x;var dy=offset*moveSpeedRatio*y;internalMoveBy(dx,dy)}if(z){var scaleMultiplier=getScaleMultiplier(z*100);var offset=transformOrigin?getTransformOriginOffset():midPoint();publicZoomTo(offset.x,offset.y,scaleMultiplier)}}function midPoint(){var ownerRect=owner.getBoundingClientRect();return{x:ownerRect.width/2,y:ownerRect.height/2}}function onTouch(e){beforeTouch(e);if(e.touches.length===1){return handleSingleFingerTouch(e,e.touches[0])}else if(e.touches.length===2){pinchZoomLength=getPinchZoomLength(e.touches[0],e.touches[1]);multiTouch=true;startTouchListenerIfNeeded()}}function beforeTouch(e){if(options.onTouch&&!options.onTouch(e)){return}e.stopPropagation();e.preventDefault()}function beforeDoubleClick(e){if(options.onDoubleClick&&!options.onDoubleClick(e)){return}e.preventDefault();e.stopPropagation()}function handleSingleFingerTouch(e){var touch=e.touches[0];var offset=getOffsetXY(touch);lastSingleFingerOffset=offset;var point=transformToScreen(offset.x,offset.y);mouseX=point.x;mouseY=point.y;smoothScroll.cancel();startTouchListenerIfNeeded()}function startTouchListenerIfNeeded(){if(touchInProgress){return}touchInProgress=true;document.addEventListener("touchmove",handleTouchMove);document.addEventListener("touchend",handleTouchEnd);document.addEventListener("touchcancel",handleTouchEnd)}function handleTouchMove(e){if(e.touches.length===1){e.stopPropagation();var touch=e.touches[0];var offset=getOffsetXY(touch);var point=transformToScreen(offset.x,offset.y);var dx=point.x-mouseX;var dy=point.y-mouseY;if(dx!==0&&dy!==0){triggerPanStart()}mouseX=point.x;mouseY=point.y;internalMoveBy(dx,dy)}else if(e.touches.length===2){multiTouch=true;var t1=e.touches[0];var t2=e.touches[1];var currentPinchLength=getPinchZoomLength(t1,t2);var scaleMultiplier=1+(currentPinchLength/pinchZoomLength-1)*pinchSpeed;var firstTouchPoint=getOffsetXY(t1);var secondTouchPoint=getOffsetXY(t2);mouseX=(firstTouchPoint.x+secondTouchPoint.x)/2;mouseY=(firstTouchPoint.y+secondTouchPoint.y)/2;if(transformOrigin){var offset=getTransformOriginOffset();mouseX=offset.x;mouseY=offset.y}publicZoomTo(mouseX,mouseY,scaleMultiplier);pinchZoomLength=currentPinchLength;e.stopPropagation();e.preventDefault()}}function handleTouchEnd(e){if(e.touches.length>0){var offset=getOffsetXY(e.touches[0]);var point=transformToScreen(offset.x,offset.y);mouseX=point.x;mouseY=point.y}else{var now=new Date;if(now-lastTouchEndTime<doubleTapSpeedInMS){if(transformOrigin){var offset=getTransformOriginOffset();smoothZoom(offset.x,offset.y,zoomDoubleClickSpeed)}else{smoothZoom(lastSingleFingerOffset.x,lastSingleFingerOffset.y,zoomDoubleClickSpeed)}}lastTouchEndTime=now;triggerPanEnd();releaseTouches()}}function getPinchZoomLength(finger1,finger2){var dx=finger1.clientX-finger2.clientX;var dy=finger1.clientY-finger2.clientY;return Math.sqrt(dx*dx+dy*dy)}function onDoubleClick(e){beforeDoubleClick(e);var offset=getOffsetXY(e);if(transformOrigin){offset=getTransformOriginOffset()}smoothZoom(offset.x,offset.y,zoomDoubleClickSpeed)}function onMouseDown(e){if(beforeMouseDown(e))return;if(touchInProgress){e.stopPropagation();return false}var isLeftButton=e.button===1&&window.event!==null||e.button===0;if(!isLeftButton)return;smoothScroll.cancel();var offset=getOffsetXY(e);var point=transformToScreen(offset.x,offset.y);mouseX=point.x;mouseY=point.y;document.addEventListener("mousemove",onMouseMove);document.addEventListener("mouseup",onMouseUp);textSelection.capture(e.target||e.srcElement);return false}function onMouseMove(e){if(touchInProgress)return;triggerPanStart();var offset=getOffsetXY(e);var point=transformToScreen(offset.x,offset.y);var dx=point.x-mouseX;var dy=point.y-mouseY;mouseX=point.x;mouseY=point.y;internalMoveBy(dx,dy)}function onMouseUp(){textSelection.release();triggerPanEnd();releaseDocumentMouse()}function releaseDocumentMouse(){document.removeEventListener("mousemove",onMouseMove);document.removeEventListener("mouseup",onMouseUp);panstartFired=false}function releaseTouches(){document.removeEventListener("touchmove",handleTouchMove);document.removeEventListener("touchend",handleTouchEnd);document.removeEventListener("touchcancel",handleTouchEnd);panstartFired=false;multiTouch=false;touchInProgress=false}function onMouseWheel(e){if(beforeWheel(e))return;smoothScroll.cancel();var delta=e.deltaY;if(e.deltaMode>0)delta*=100;var scaleMultiplier=getScaleMultiplier(delta);if(scaleMultiplier!==1){var offset=transformOrigin?getTransformOriginOffset():getOffsetXY(e);publicZoomTo(offset.x,offset.y,scaleMultiplier);e.preventDefault()}}function getOffsetXY(e){var offsetX,offsetY;var ownerRect=owner.getBoundingClientRect();offsetX=e.clientX-ownerRect.left;offsetY=e.clientY-ownerRect.top;return{x:offsetX,y:offsetY}}function smoothZoom(clientX,clientY,scaleMultiplier){var fromValue=transform.scale;var from={scale:fromValue};var to={scale:scaleMultiplier*fromValue};smoothScroll.cancel();cancelZoomAnimation();zoomToAnimation=animate(from,to,{step:function(v){zoomAbs(clientX,clientY,v.scale)},done:triggerZoomEnd})}function smoothZoomAbs(clientX,clientY,toScaleValue){var fromValue=transform.scale;var from={scale:fromValue};var to={scale:toScaleValue};smoothScroll.cancel();cancelZoomAnimation();zoomToAnimation=animate(from,to,{step:function(v){zoomAbs(clientX,clientY,v.scale)}})}function getTransformOriginOffset(){var ownerRect=owner.getBoundingClientRect();return{x:ownerRect.width*transformOrigin.x,y:ownerRect.height*transformOrigin.y}}function publicZoomTo(clientX,clientY,scaleMultiplier){smoothScroll.cancel();cancelZoomAnimation();return zoomByRatio(clientX,clientY,scaleMultiplier)}function cancelZoomAnimation(){if(zoomToAnimation){zoomToAnimation.cancel();zoomToAnimation=null}}function getScaleMultiplier(delta){var sign=Math.sign(delta);var deltaAdjustedSpeed=Math.min(.25,Math.abs(speed*delta/128));return 1-sign*deltaAdjustedSpeed}function triggerPanStart(){if(!panstartFired){triggerEvent("panstart");panstartFired=true;smoothScroll.start()}}function triggerPanEnd(){if(panstartFired){if(!multiTouch)smoothScroll.stop();triggerEvent("panend")}}function triggerZoomEnd(){triggerEvent("zoomend")}function triggerEvent(name){api.fire(name,api)}}function parseTransformOrigin(options){if(!options)return;if(typeof options==="object"){if(!isNumber(options.x)||!isNumber(options.y))failTransformOrigin(options);return options}failTransformOrigin()}function failTransformOrigin(options){console.error(options);throw new Error(["Cannot parse transform origin.","Some good examples:",'  "center center" can be achieved with {x: 0.5, y: 0.5}','  "top center" can be achieved with {x: 0.5, y: 0}','  "bottom right" can be achieved with {x: 1, y: 1}'].join("\n"))}function noop(){}function validateBounds(bounds){var boundsType=typeof bounds;if(boundsType==="undefined"||boundsType==="boolean")return;var validBounds=isNumber(bounds.left)&&isNumber(bounds.top)&&isNumber(bounds.bottom)&&isNumber(bounds.right);if(!validBounds)throw new Error("Bounds object is not valid. It can be: "+"undefined, boolean (true|false) or an object {left, top, right, bottom}")}function isNumber(x){return Number.isFinite(x)}function isNaN(value){if(Number.isNaN){return Number.isNaN(value)}return value!==value}function rigidScroll(){return{start:noop,stop:noop,cancel:noop}}function autoRun(){if(typeof document==="undefined")return;var scripts=document.getElementsByTagName("script");if(!scripts)return;var panzoomScript;for(var i=0;i<scripts.length;++i){var x=scripts[i];if(x.src&&x.src.match(/\bpanzoom(\.min)?\.js/)){panzoomScript=x;break}}if(!panzoomScript)return;var query=panzoomScript.getAttribute("query");if(!query)return;var globalName=panzoomScript.getAttribute("name")||"pz";var started=Date.now();tryAttach();function tryAttach(){var el=document.querySelector(query);if(!el){var now=Date.now();var elapsed=now-started;if(elapsed<2e3){setTimeout(tryAttach,100);return}console.error("Cannot find the panzoom element",globalName);return}var options=collectOptions(panzoomScript);console.log(options);window[globalName]=createPanZoom(el,options)}function collectOptions(script){var attrs=script.attributes;var options={};for(var i=0;i<attrs.length;++i){var attr=attrs[i];var nameValue=getPanzoomAttributeNameValue(attr);if(nameValue){options[nameValue.name]=nameValue.value}}return options}function getPanzoomAttributeNameValue(attr){if(!attr.name)return;var isPanZoomAttribute=attr.name[0]==="p"&&attr.name[1]==="z"&&attr.name[2]==="-";if(!isPanZoomAttribute)return;var name=attr.name.substr(3);var value=JSON.parse(attr.value);return{name:name,value:value}}}autoRun()},{"./lib/createTextSelectionInterceptor.js":2,"./lib/domController.js":3,"./lib/kinetic.js":4,"./lib/svgController.js":5,"./lib/transform.js":6,amator:7,"ngraph.events":9,wheel:10}],2:[function(require,module,exports){module.exports=createTextSelectionInterceptor;function createTextSelectionInterceptor(useFake){if(useFake){return{capture:noop,release:noop}}var dragObject;var prevSelectStart;var prevDragStart;var wasCaptured=false;return{capture:capture,release:release};function capture(domObject){wasCaptured=true;prevSelectStart=window.document.onselectstart;prevDragStart=window.document.ondragstart;window.document.onselectstart=disabled;dragObject=domObject;dragObject.ondragstart=disabled}function release(){if(!wasCaptured)return;wasCaptured=false;window.document.onselectstart=prevSelectStart;if(dragObject)dragObject.ondragstart=prevDragStart}}function disabled(e){e.stopPropagation();return false}function noop(){}},{}],3:[function(require,module,exports){module.exports=makeDomController;module.exports.canAttach=isDomElement;function makeDomController(domElement,options){var elementValid=isDomElement(domElement);if(!elementValid){throw new Error("panzoom requires DOM element to be attached to the DOM tree")}var owner=domElement.parentElement;domElement.scrollTop=0;if(!options.disableKeyboardInteraction){owner.setAttribute("tabindex",0)}var api={getBBox:getBBox,getOwner:getOwner,applyTransform:applyTransform};return api;function getOwner(){return owner}function getBBox(){return{left:0,top:0,width:domElement.clientWidth,height:domElement.clientHeight}}function applyTransform(transform){domElement.style.transformOrigin="0 0 0";domElement.style.transform="matrix("+transform.scale+", 0, 0, "+transform.scale+", "+transform.x+", "+transform.y+")"}}function isDomElement(element){return element&&element.parentElement&&element.style}},{}],4:[function(require,module,exports){module.exports=kinetic;function kinetic(getPoint,scroll,settings){if(typeof settings!=="object"){settings={}}var minVelocity=typeof settings.minVelocity==="number"?settings.minVelocity:5;var amplitude=typeof settings.amplitude==="number"?settings.amplitude:.25;var cancelAnimationFrame=typeof settings.cancelAnimationFrame==="function"?settings.cancelAnimationFrame:getCancelAnimationFrame();var requestAnimationFrame=typeof settings.requestAnimationFrame==="function"?settings.requestAnimationFrame:getRequestAnimationFrame();var lastPoint;var timestamp;var timeConstant=342;var ticker;var vx,targetX,ax;var vy,targetY,ay;var raf;return{start:start,stop:stop,cancel:dispose};function dispose(){cancelAnimationFrame(ticker);cancelAnimationFrame(raf)}function start(){lastPoint=getPoint();ax=ay=vx=vy=0;timestamp=new Date;cancelAnimationFrame(ticker);cancelAnimationFrame(raf);ticker=requestAnimationFrame(track)}function track(){var now=Date.now();var elapsed=now-timestamp;timestamp=now;var currentPoint=getPoint();var dx=currentPoint.x-lastPoint.x;var dy=currentPoint.y-lastPoint.y;lastPoint=currentPoint;var dt=1e3/(1+elapsed);vx=.8*dx*dt+.2*vx;vy=.8*dy*dt+.2*vy;ticker=requestAnimationFrame(track)}function stop(){cancelAnimationFrame(ticker);cancelAnimationFrame(raf);var currentPoint=getPoint();targetX=currentPoint.x;targetY=currentPoint.y;timestamp=Date.now();if(vx<-minVelocity||vx>minVelocity){ax=amplitude*vx;targetX+=ax}if(vy<-minVelocity||vy>minVelocity){ay=amplitude*vy;targetY+=ay}raf=requestAnimationFrame(autoScroll)}function autoScroll(){var elapsed=Date.now()-timestamp;var moving=false;var dx=0;var dy=0;if(ax){dx=-ax*Math.exp(-elapsed/timeConstant);if(dx>.5||dx<-.5)moving=true;else dx=ax=0}if(ay){dy=-ay*Math.exp(-elapsed/timeConstant);if(dy>.5||dy<-.5)moving=true;else dy=ay=0}if(moving){scroll(targetX+dx,targetY+dy);raf=requestAnimationFrame(autoScroll)}}}function getCancelAnimationFrame(){if(typeof cancelAnimationFrame==="function")return cancelAnimationFrame;return clearTimeout}function getRequestAnimationFrame(){if(typeof requestAnimationFrame==="function")return requestAnimationFrame;return function(handler){return setTimeout(handler,16)}}},{}],5:[function(require,module,exports){module.exports=makeSvgController;module.exports.canAttach=isSVGElement;function makeSvgController(svgElement,options){if(!isSVGElement(svgElement)){throw new Error("svg element is required for svg.panzoom to work")}var owner=svgElement.ownerSVGElement;if(!owner){throw new Error("Do not apply panzoom to the root <svg> element. "+"Use its child instead (e.g. <g></g>). "+"As of March 2016 only FireFox supported transform on the root element")}if(!options.disableKeyboardInteraction){owner.setAttribute("tabindex",0)}var api={getBBox:getBBox,getScreenCTM:getScreenCTM,getOwner:getOwner,applyTransform:applyTransform,initTransform:initTransform};return api;function getOwner(){return owner}function getBBox(){var bbox=svgElement.getBBox();return{left:bbox.x,top:bbox.y,width:bbox.width,height:bbox.height}}function getScreenCTM(){var ctm=owner.getCTM();if(!ctm){return owner.getScreenCTM()}return ctm}function initTransform(transform){var screenCTM=svgElement.getCTM();if(screenCTM===null){screenCTM=document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGMatrix()}transform.x=screenCTM.e;transform.y=screenCTM.f;transform.scale=screenCTM.a;owner.removeAttributeNS(null,"viewBox")}function applyTransform(transform){svgElement.setAttribute("transform","matrix("+transform.scale+" 0 0 "+transform.scale+" "+transform.x+" "+transform.y+")")}}function isSVGElement(element){return element&&element.ownerSVGElement&&element.getCTM}},{}],6:[function(require,module,exports){module.exports=Transform;function Transform(){this.x=0;this.y=0;this.scale=1}},{}],7:[function(require,module,exports){var BezierEasing=require("bezier-easing");var animations={ease:BezierEasing(.25,.1,.25,1),easeIn:BezierEasing(.42,0,1,1),easeOut:BezierEasing(0,0,.58,1),easeInOut:BezierEasing(.42,0,.58,1),linear:BezierEasing(0,0,1,1)};module.exports=animate;module.exports.makeAggregateRaf=makeAggregateRaf;module.exports.sharedScheduler=makeAggregateRaf();function animate(source,target,options){var start=Object.create(null);var diff=Object.create(null);options=options||{};var easing=typeof options.easing==="function"?options.easing:animations[options.easing];if(!easing){if(options.easing){console.warn("Unknown easing function in amator: "+options.easing)}easing=animations.ease}var step=typeof options.step==="function"?options.step:noop;var done=typeof options.done==="function"?options.done:noop;var scheduler=getScheduler(options.scheduler);var keys=Object.keys(target);keys.forEach(function(key){start[key]=source[key];diff[key]=target[key]-source[key]});var durationInMs=typeof options.duration==="number"?options.duration:400;var durationInFrames=Math.max(1,durationInMs*.06);var previousAnimationId;var frame=0;previousAnimationId=scheduler.next(loop);return{cancel:cancel};function cancel(){scheduler.cancel(previousAnimationId);previousAnimationId=0}function loop(){var t=easing(frame/durationInFrames);frame+=1;setValues(t);if(frame<=durationInFrames){previousAnimationId=scheduler.next(loop);step(source)}else{previousAnimationId=0;setTimeout(function(){done(source)},0)}}function setValues(t){keys.forEach(function(key){source[key]=diff[key]*t+start[key]})}}function noop(){}function getScheduler(scheduler){if(!scheduler){var canRaf=typeof window!=="undefined"&&window.requestAnimationFrame;return canRaf?rafScheduler():timeoutScheduler()}if(typeof scheduler.next!=="function")throw new Error("Scheduler is supposed to have next(cb) function");if(typeof scheduler.cancel!=="function")throw new Error("Scheduler is supposed to have cancel(handle) function");return scheduler}function rafScheduler(){return{next:window.requestAnimationFrame.bind(window),cancel:window.cancelAnimationFrame.bind(window)}}function timeoutScheduler(){return{next:function(cb){return setTimeout(cb,1e3/60)},cancel:function(id){return clearTimeout(id)}}}function makeAggregateRaf(){var frontBuffer=new Set;var backBuffer=new Set;var frameToken=0;return{next:next,cancel:next,clearAll:clearAll};function clearAll(){frontBuffer.clear();backBuffer.clear();cancelAnimationFrame(frameToken);frameToken=0}function next(callback){backBuffer.add(callback);renderNextFrame()}function renderNextFrame(){if(!frameToken)frameToken=requestAnimationFrame(renderFrame)}function renderFrame(){frameToken=0;var t=backBuffer;backBuffer=frontBuffer;frontBuffer=t;frontBuffer.forEach(function(callback){callback()});frontBuffer.clear()}function cancel(callback){backBuffer.delete(callback)}}},{"bezier-easing":8}],8:[function(require,module,exports){var NEWTON_ITERATIONS=4;var NEWTON_MIN_SLOPE=.001;var SUBDIVISION_PRECISION=1e-7;var SUBDIVISION_MAX_ITERATIONS=10;var kSplineTableSize=11;var kSampleStepSize=1/(kSplineTableSize-1);var float32ArraySupported=typeof Float32Array==="function";function A(aA1,aA2){return 1-3*aA2+3*aA1}function B(aA1,aA2){return 3*aA2-6*aA1}function C(aA1){return 3*aA1}function calcBezier(aT,aA1,aA2){return((A(aA1,aA2)*aT+B(aA1,aA2))*aT+C(aA1))*aT}function getSlope(aT,aA1,aA2){return 3*A(aA1,aA2)*aT*aT+2*B(aA1,aA2)*aT+C(aA1)}function binarySubdivide(aX,aA,aB,mX1,mX2){var currentX,currentT,i=0;do{currentT=aA+(aB-aA)/2;currentX=calcBezier(currentT,mX1,mX2)-aX;if(currentX>0){aB=currentT}else{aA=currentT}}while(Math.abs(currentX)>SUBDIVISION_PRECISION&&++i<SUBDIVISION_MAX_ITERATIONS);return currentT}function newtonRaphsonIterate(aX,aGuessT,mX1,mX2){for(var i=0;i<NEWTON_ITERATIONS;++i){var currentSlope=getSlope(aGuessT,mX1,mX2);if(currentSlope===0){return aGuessT}var currentX=calcBezier(aGuessT,mX1,mX2)-aX;aGuessT-=currentX/currentSlope}return aGuessT}function LinearEasing(x){return x}module.exports=function bezier(mX1,mY1,mX2,mY2){if(!(0<=mX1&&mX1<=1&&0<=mX2&&mX2<=1)){throw new Error("bezier x values must be in [0, 1] range")}if(mX1===mY1&&mX2===mY2){return LinearEasing}var sampleValues=float32ArraySupported?new Float32Array(kSplineTableSize):new Array(kSplineTableSize);for(var i=0;i<kSplineTableSize;++i){sampleValues[i]=calcBezier(i*kSampleStepSize,mX1,mX2)}function getTForX(aX){var intervalStart=0;var currentSample=1;var lastSample=kSplineTableSize-1;for(;currentSample!==lastSample&&sampleValues[currentSample]<=aX;++currentSample){intervalStart+=kSampleStepSize}--currentSample;var dist=(aX-sampleValues[currentSample])/(sampleValues[currentSample+1]-sampleValues[currentSample]);var guessForT=intervalStart+dist*kSampleStepSize;var initialSlope=getSlope(guessForT,mX1,mX2);if(initialSlope>=NEWTON_MIN_SLOPE){return newtonRaphsonIterate(aX,guessForT,mX1,mX2)}else if(initialSlope===0){return guessForT}else{return binarySubdivide(aX,intervalStart,intervalStart+kSampleStepSize,mX1,mX2)}}return function BezierEasing(x){if(x===0){return 0}if(x===1){return 1}return calcBezier(getTForX(x),mY1,mY2)}}},{}],9:[function(require,module,exports){module.exports=function eventify(subject){validateSubject(subject);var eventsStorage=createEventsStorage(subject);subject.on=eventsStorage.on;subject.off=eventsStorage.off;subject.fire=eventsStorage.fire;return subject};function createEventsStorage(subject){var registeredEvents=Object.create(null);return{on:function(eventName,callback,ctx){if(typeof callback!=="function"){throw new Error("callback is expected to be a function")}var handlers=registeredEvents[eventName];if(!handlers){handlers=registeredEvents[eventName]=[]}handlers.push({callback:callback,ctx:ctx});return subject},off:function(eventName,callback){var wantToRemoveAll=typeof eventName==="undefined";if(wantToRemoveAll){registeredEvents=Object.create(null);return subject}if(registeredEvents[eventName]){var deleteAllCallbacksForEvent=typeof callback!=="function";if(deleteAllCallbacksForEvent){delete registeredEvents[eventName]}else{var callbacks=registeredEvents[eventName];for(var i=0;i<callbacks.length;++i){if(callbacks[i].callback===callback){callbacks.splice(i,1)}}}}return subject},fire:function(eventName){var callbacks=registeredEvents[eventName];if(!callbacks){return subject}var fireArguments;if(arguments.length>1){fireArguments=Array.prototype.splice.call(arguments,1)}for(var i=0;i<callbacks.length;++i){var callbackInfo=callbacks[i];callbackInfo.callback.apply(callbackInfo.ctx,fireArguments)}return subject}}}function validateSubject(subject){if(!subject){throw new Error("Eventify cannot use falsy object as events subject")}var reservedWords=["on","fire","off"];for(var i=0;i<reservedWords.length;++i){if(subject.hasOwnProperty(reservedWords[i])){throw new Error("Subject cannot be eventified, since it already has property '"+reservedWords[i]+"'")}}}},{}],10:[function(require,module,exports){module.exports=addWheelListener;module.exports.addWheelListener=addWheelListener;module.exports.removeWheelListener=removeWheelListener;function addWheelListener(element,listener,useCapture){element.addEventListener("wheel",listener,useCapture)}function removeWheelListener(element,listener,useCapture){element.removeEventListener("wheel",listener,useCapture)}},{}]},{},[1])(1)});
+</script><script>let num_pages = -1;
+let pc = document.getElementById('pagesContainer');
+let r = document.querySelector(':root');
+let pz;
+let showAboutOnStart = false;
+
+let storageKey = "mokuro_" + window.location.pathname;
+
+let defaultState = {
+    page_idx: 0,
+    page2_idx: -1,
+    hasCover: false,
+    r2l: true,
+    singlePageView: false,
+    ctrlToPan: false,
+    textBoxBorders: false,
+    editableText: false,
+    displayOCR: true,
+    fontSize: "auto",
+    eInkMode: false,
+    defaultZoomMode: "fit to screen",
+    toggleOCRTextBoxes: false,
+    backgroundColor: '#C4C3D0',
+};
+
+let state = JSON.parse(JSON.stringify(defaultState));
+
+function saveState() {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+}
+
+function loadState() {
+    let newState = localStorage.getItem(storageKey)
+
+    if (newState !== null) {
+        state = JSON.parse(newState);
+    }
+
+    updateUI();
+    updateProperties();
+}
+
+function updateUI() {
+    document.getElementById("menuR2l").checked = state.r2l;
+    document.getElementById("menuCtrlToPan").checked = state.ctrlToPan;
+    document.getElementById("menuDoublePageView").checked = !state.singlePageView;
+    document.getElementById("menuHasCover").checked = state.hasCover;
+    document.getElementById("menuTextBoxBorders").checked = state.textBoxBorders;
+    document.getElementById("menuEditableText").checked = state.editableText;
+    document.getElementById("menuDisplayOCR").checked = state.displayOCR;
+    document.getElementById('menuFontSize').value = state.fontSize;
+    document.getElementById('menuEInkMode').checked = state.eInkMode;
+    document.getElementById('menuDefaultZoom').value = state.defaultZoomMode;
+    document.getElementById('menuToggleOCRTextBoxes').checked = state.toggleOCRTextBoxes;
+    document.getElementById('menuBackgroundColor').value = state.backgroundColor;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    loadState();
+    num_pages = document.getElementsByClassName("page").length;
+
+    pz = panzoom(pc, {
+        bounds: true,
+        boundsPadding: 0.05,
+        maxZoom: 10,
+        minZoom: 0.1,
+        zoomDoubleClickSpeed: 1,
+        enableTextSelection: true,
+
+        beforeMouseDown: function (e) {
+            let shouldIgnore = disablePanzoomOnElement(e.target) ||
+                (e.target.closest('.textBox') !== null) ||
+                (state.ctrlToPan && !e.ctrlKey);
+            return shouldIgnore;
+        },
+
+        beforeWheel: function (e) {
+            let shouldIgnore = disablePanzoomOnElement(e.target);
+            return shouldIgnore;
+        },
+
+        onTouch: function (e) {
+            if (disablePanzoomOnElement(e.target)) {
+                e.stopPropagation();
+                return false;
+            }
+
+            if (e.touches.length > 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    });
+
+    updatePage(state.page_idx);
+    initTextBoxes();
+
+    if (showAboutOnStart) {
+        document.getElementById('popupAbout').style.display = 'block';
+        document.getElementById('dimOverlay').style.display = 'initial';
+        pz.pause();
+    }
+
+}, false);
+
+function disablePanzoomOnElement(element) {
+    return document.getElementById('topMenu').contains(element);
+}
+
+function initTextBoxes() {
+// Add event listeners for toggling ocr text boxes with the toggleOCRTextBoxes option.
+    let textBoxes = document.querySelectorAll('.textBox');
+    for (let i = 0; i < textBoxes.length; i++) {
+        textBoxes[i].addEventListener('click', function (e) {
+                let textValue = this.innerHTML;
+                let trantext = document.getElementById("trantext")
+                let trantextComplete = '';
+                let trantextlist = this.childNodes.forEach(textt => {
+                    trantextComplete = trantextComplete + textt.innerHTML;
+                })
+                trantext.innerHTML = '<p>' + trantextComplete + '</p>';
+                // Remove hovered state from all other .textBoxes
+                for (let j = 0; j < textBoxes.length; j++) {
+                    if (i !== j) {
+                        textBoxes[j].classList.remove('hovered');
+                    }
+                }
+        });
+    }
+// When clicking off of a .textBox, remove the hovered state.
+    document.addEventListener('click', function (e) {
+        if (state.toggleOCRTextBoxes) {
+            if (e.target.closest('.textBox') === null) {
+                let textBoxes = document.querySelectorAll('.textBox');
+                for (let i = 0; i < textBoxes.length; i++) {
+                    textBoxes[i].classList.remove('hovered');
+                }
+            }
+        }
+    });
+
+    const trantext = document.getElementById("trantext")
+    trantext.addEventListener('click', function (e) {
+        trantext.classList.remove('fetchingError');
+        trantext.classList.add('fetching');
+
+        const trantextInner = trantext.childNodes[0];
+        const trantextText = trantextInner.innerHTML;
+
+        translateJapaneseToEnglish(trantextText)
+            .then(translatedText => {
+                trantextInner.innerHTML += '<p>' + translatedText + '</p>';
+                trantext.classList.remove('fetching');
+            })
+            .catch(error => {
+                trantext.classList.add('fetchingError');
+            })
+    })
+}
+
+async function translateJapaneseToEnglish(japaneseText) {
+    const data = {
+      "text": japaneseText,
+      "target_lang": "EN"
+    };
+  
+    try {
+      const response = await fetch('https://deepl-proxy.fly.dev/api/v1/translate', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        const translatedText = result.translations[0].text;
+        return translatedText;
+      } else {
+        throw new Error('Translation failed');
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+      return null;
+    }
+  }
+
+function updateProperties() {
+    if (state.textBoxBorders) {
+        r.style.setProperty('--textBoxBorderHoverColor', 'rgba(237, 28, 36, 0.3)');
+    } else {
+        r.style.setProperty('--textBoxBorderHoverColor', 'rgba(0, 0, 0, 0)');
+    }
+
+    pc.contentEditable = state.editableText;
+
+    if (state.displayOCR) {
+        r.style.setProperty('--textBoxDisplay', 'initial');
+    } else {
+        r.style.setProperty('--textBoxDisplay', 'none');
+    }
+
+
+    if (state.fontSize === 'auto') {
+        pc.classList.remove('textBoxFontSizeOverride');
+    } else {
+        r.style.setProperty('--textBoxFontSize', state.fontSize + 'pt');
+        pc.classList.add('textBoxFontSizeOverride');
+    }
+
+    if (state.eInkMode) {
+        document.getElementById('topMenu').classList.add("notransition");
+    } else {
+        document.getElementById('topMenu').classList.remove("notransition");
+    }
+
+    if (state.backgroundColor) {
+        r.style.setProperty('--colorBackground', state.backgroundColor)
+    }
+}
+
+document.getElementById('menuR2l').addEventListener('click', function () {
+    state.r2l = document.getElementById("menuR2l").checked;
+    saveState();
+    updatePage(state.page_idx);
+}, false);
+
+document.getElementById('menuCtrlToPan').addEventListener('click', function () {
+    state.ctrlToPan = document.getElementById("menuCtrlToPan").checked;
+    saveState();
+}, false);
+
+document.getElementById('menuDoublePageView').addEventListener('click', function () {
+    state.singlePageView = !document.getElementById("menuDoublePageView").checked;
+    saveState();
+    updatePage(state.page_idx);
+}, false);
+
+document.getElementById('menuHasCover').addEventListener('click', function () {
+    state.hasCover = document.getElementById("menuHasCover").checked;
+    saveState();
+    updatePage(state.page_idx);
+}, false);
+
+document.getElementById('menuTextBoxBorders').addEventListener('click', function () {
+    state.textBoxBorders = document.getElementById("menuTextBoxBorders").checked;
+    saveState();
+    updateProperties();
+}, false);
+
+document.getElementById('menuEditableText').addEventListener('click', function () {
+    state.editableText = document.getElementById("menuEditableText").checked;
+    saveState();
+    updateProperties();
+}, false);
+
+document.getElementById('menuDisplayOCR').addEventListener('click', function () {
+    state.displayOCR = document.getElementById("menuDisplayOCR").checked;
+    saveState();
+    updateProperties();
+}, false);
+
+document.getElementById('menuEInkMode').addEventListener('click', function () {
+    state.eInkMode = document.getElementById("menuEInkMode").checked;
+    saveState();
+    updateProperties();
+    if (state.eInkMode) {
+        eInkRefresh();
+    }
+}, false);
+
+document.getElementById('menuToggleOCRTextBoxes').addEventListener('click', function () {
+    state.toggleOCRTextBoxes = document.getElementById("menuToggleOCRTextBoxes").checked;
+    saveState();
+    updateProperties();
+}, false);
+
+document.getElementById('menuBackgroundColor').addEventListener(
+    'input',
+    function (event) {
+      state.backgroundColor = event.target.value;
+      saveState();
+      updateProperties();
+    },
+    false
+  );
+
+document.getElementById('menuOriginalSize').addEventListener('click', zoomOriginal, false);
+document.getElementById('menuFitToWidth').addEventListener('click', zoomFitToWidth, false);
+document.getElementById('menuFitToScreen').addEventListener('click', zoomFitToScreen, false);
+document.getElementById('menuFullScreen').addEventListener('click', toggleFullScreen, false);
+
+document.getElementById('menuAbout').addEventListener('click', function () {
+    document.getElementById('popupAbout').style.display = 'block';
+    document.getElementById('dimOverlay').style.display = 'initial';
+    pz.pause();
+}, false);
+
+document.getElementById('menuReset').addEventListener('click', function () {
+    let page_idx = state.page_idx;
+    state = JSON.parse(JSON.stringify(defaultState));
+    updateUI();
+    updatePage(page_idx);
+    updateProperties();
+}, false);
+
+document.getElementById('dimOverlay').addEventListener('click', function () {
+    document.getElementById('popupAbout').style.display = 'none';
+    document.getElementById('dimOverlay').style.display = 'none';
+    pz.resume();
+}, false);
+
+document.getElementById('menuFontSize').addEventListener('change', (e) => {
+    state.fontSize = e.target.value;
+    saveState();
+    updateProperties();
+});
+
+document.getElementById('menuDefaultZoom').addEventListener('change', (e) => {
+    state.defaultZoomMode = e.target.value;
+    saveState();
+});
+
+
+document.getElementById('pageIdxInput').addEventListener('change', (e) => {
+    updatePage(e.target.value - 1);
+})
+
+document.getElementById('buttonHideMenu').addEventListener('click', function () {
+    // document.getElementById('topMenu').style.display = "none";
+    document.getElementById('showMenuA').style.display = "inline-block";
+    document.getElementById('topMenu').classList.add("hidden");
+}, false);
+
+document.getElementById('showMenuA').addEventListener('click', function () {
+    // document.getElementById('topMenu').style.display = "initial";
+    document.getElementById('showMenuA').style.display = "none";
+    document.getElementById('topMenu').classList.remove("hidden");
+}, false);
+
+document.getElementById('buttonLeftLeft').addEventListener('click', inputLeftLeft, false);
+document.getElementById('buttonLeft').addEventListener('click', inputLeft, false);
+document.getElementById('buttonRight').addEventListener('click', inputRight, false);
+document.getElementById('buttonRightRight').addEventListener('click', inputRightRight, false);
+document.getElementById('leftAPage').addEventListener('click', inputLeft, false);
+document.getElementById('leftAScreen').addEventListener('click', inputLeft, false);
+document.getElementById('rightAPage').addEventListener('click', inputRight, false);
+document.getElementById('rightAScreen').addEventListener('click', inputRight, false);
+
+document.addEventListener("keydown", function onEvent(e) {
+    switch (e.key) {
+        case "PageUp":
+            prevPage();
+            break;
+
+        case "PageDown":
+            nextPage();
+            break;
+
+        case "Home":
+            firstPage();
+            break;
+
+        case "End":
+            lastPage();
+            break;
+
+        case " ":
+            nextPage();
+            break;
+
+        case "0":
+            zoomDefault();
+            break;
+    }
+});
+
+function isPageFirstOfPair(page_idx) {
+    if (state.singlePageView) {
+        return true;
+    } else {
+        if (state.hasCover) {
+            return (page_idx === 0 || (page_idx % 2 === 1));
+        } else {
+            return page_idx % 2 === 0;
+        }
+    }
+}
+
+function getPage(page_idx) {
+    return document.getElementById("page" + page_idx);
+}
+
+function getOffsetLeft() {
+    return 0;
+}
+
+function getOffsetTop() {
+    let offset = 0;
+    let menu = document.getElementById('topMenu');
+    if (!menu.classList.contains("hidden")) {
+        offset += menu.getBoundingClientRect().bottom + 10;
+    }
+    return offset;
+}
+
+function getOffsetRight() {
+    return 0;
+}
+
+function getOffsetBottom() {
+    return 0;
+}
+
+function getScreenWidth() {
+    return window.innerWidth - getOffsetLeft() - getOffsetRight();
+}
+
+function getScreenHeight() {
+    return window.innerHeight - getOffsetTop() - getOffsetBottom();
+}
+
+function panAlign(align_x, align_y) {
+    let scale = pz.getTransform().scale;
+    let x;
+    let y;
+
+    switch (align_x) {
+        case "left":
+            x = getOffsetLeft();
+            break;
+        case "center":
+            x = getOffsetLeft() + (getScreenWidth() - pc.offsetWidth * scale) / 2;
+            break;
+        case "right":
+            x = getOffsetLeft() + (getScreenWidth() - pc.offsetWidth * scale);
+            break;
+    }
+
+    switch (align_y) {
+        case "top":
+            y = getOffsetTop();
+            break;
+        case "center":
+            y = getOffsetTop() + (getScreenHeight() - pc.offsetHeight * scale) / 2;
+            break;
+        case "bottom":
+            y = getOffsetTop() + (getScreenHeight() - pc.offsetHeight * scale);
+            break;
+    }
+
+    pz.moveTo(x, y);
+}
+
+
+function zoomOriginal() {
+    pz.moveTo(0, 0);
+    pz.zoomTo(0, 0, 1 / pz.getTransform().scale);
+    panAlign("center", "center");
+}
+
+function zoomFitToWidth() {
+    let scale = (1 / pz.getTransform().scale) * (getScreenWidth() / pc.offsetWidth);
+    pz.moveTo(0, 0);
+    pz.zoomTo(0, 0, scale);
+    panAlign("center", "top");
+}
+
+function zoomFitToScreen() {
+    let scale_x = getScreenWidth() / pc.offsetWidth;
+    let scale_y = getScreenHeight() / pc.offsetHeight;
+    let scale = (1 / pz.getTransform().scale) * Math.min(scale_x, scale_y);
+    pz.moveTo(0, 0);
+    pz.zoomTo(0, 0, scale);
+    panAlign("center", "center");
+}
+
+function zoomDefault() {
+    switch (state.defaultZoomMode) {
+        case "fit to screen":
+            zoomFitToScreen();
+            break;
+        case "fit to width":
+            zoomFitToWidth();
+            break;
+        case "original size":
+            zoomOriginal();
+            break;
+    }
+}
+
+function updatePage(new_page_idx) {
+    new_page_idx = Math.min(Math.max(new_page_idx, 0), num_pages - 1);
+
+    getPage(state.page_idx).style.display = "none";
+
+    if (state.page2_idx >= 0) {
+        getPage(state.page2_idx).style.display = "none";
+    }
+
+    if (isPageFirstOfPair(new_page_idx)) {
+        state.page_idx = new_page_idx;
+    } else {
+        state.page_idx = new_page_idx - 1;
+    }
+
+    getPage(state.page_idx).style.display = "inline-block";
+    getPage(state.page_idx).style.order = 2;
+
+    if (!state.singlePageView && state.page_idx < num_pages - 1 && !isPageFirstOfPair(state.page_idx + 1)) {
+        state.page2_idx = state.page_idx + 1;
+        getPage(state.page2_idx).style.display = "inline-block";
+
+        if (state.r2l) {
+            getPage(state.page2_idx).style.order = 1;
+        } else {
+            getPage(state.page2_idx).style.order = 3;
+        }
+
+    } else {
+        state.page2_idx = -1;
+    }
+
+    document.getElementById("pageIdxInput").value = state.page_idx + 1;
+
+    page2_txt = (state.page2_idx >= 0) ? ',' + (state.page2_idx + 1) : "";
+    document.getElementById("pageIdxDisplay").innerHTML = (state.page_idx + 1) + page2_txt + '/' + num_pages;
+
+    saveState();
+    zoomDefault();
+    if (state.eInkMode) {
+        eInkRefresh();
+    }
+}
+
+function firstPage() {
+    updatePage(0);
+}
+
+function lastPage() {
+    updatePage(num_pages - 1);
+}
+
+function prevPage() {
+    updatePage(state.page_idx - (state.singlePageView ? 1 : 2));
+}
+
+function nextPage() {
+    updatePage(state.page_idx + (state.singlePageView ? 1 : 2));
+}
+
+function inputLeftLeft() {
+    if (state.r2l) {
+        lastPage();
+    } else {
+        firstPage();
+    }
+}
+
+function inputLeft() {
+    if (state.r2l) {
+        nextPage();
+    } else {
+        prevPage();
+    }
+}
+
+function inputRight() {
+    if (state.r2l) {
+        prevPage();
+    } else {
+        nextPage();
+    }
+}
+
+function inputRightRight() {
+    if (state.r2l) {
+        firstPage();
+    } else {
+        lastPage();
+    }
+}
+
+function toggleFullScreen() {
+    var doc = window.document;
+    var docEl = doc.documentElement;
+
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+    } else {
+        cancelFullScreen.call(doc);
+    }
+}
+
+function eInkRefresh() {
+    pc.classList.add("inverted");
+    document.body.style.backgroundColor = "black";
+    setTimeout(function () {
+        pc.classList.remove("inverted");
+        document.body.style.backgroundColor = r.style.getPropertyValue("--colorBackground");
+    }, 300);
+}</script></body></html>
